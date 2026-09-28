@@ -23,7 +23,7 @@ const kSize = 6 * n + 3
 
 SpinVec = SpinMats(1 // 2)
 const t = 1.0
-const U = 2.0 *2
+const U = 4.0 *2
 
 ##### Thermodynamic parameters
 const T = 0.00001
@@ -77,7 +77,7 @@ mft = TBMFTModel(M, ChiParams, [UParam], IntraQuarticToHopping)
 Init_OP_FM = [0.1,0.5,0.5]
 Init_OP_AFM = [0.1,0.99,-0.99]
 
-results = SolveMFT!(mft,Init_OP_AFM, max_iter = 1000, tol = 1E-6)#, fileName)
+results = SolveMFT!(mft,Init_OP_FM, max_iter = 1000, tol = 1E-6)#, fileName)
 p = plot(mft.MFTEnergy, marker = ":circle",xlabel = "Iteration",ylabel = "MFT Energy",title = "Square Lattice Hubbard Model at U=4t, n=0.5")#, , , , legend = false)
 display(p)
 println("Sz on site 1: $(Neel_1.value[end])")

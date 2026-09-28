@@ -72,7 +72,7 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         @info "COMPLETED with convergence = $(convergence)!"
         return selfcons
     end
@@ -85,7 +85,7 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         @info "COMPLETED with convergence = $(convergence)!"
         return selfcons
     end
@@ -96,10 +96,14 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         Initial     =   R.(rand(Uniform(Initial_range...), length(mft.HoppingOrders)))
         selfcons    =   SelfCons(MFTIterator, Update, Initial ; F_args = (mft , ), Update_kwargs = Update_kwargs)
         
-        FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval, save_checkpoints = debug)
+        if debug
+            FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval)
+        else
+            FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
+        end
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         if !debug
             extract_data!(mft, selfcons, fileName)
         end
@@ -112,10 +116,14 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         Initial     =   R.(rand(Uniform(Initial_range...), length(mft.HoppingOrders) + length(mft.PairingOrders)))
         selfcons    =   SelfCons(MFTIterator, Update, Initial ; F_args = (mft , ), Update_kwargs = Update_kwargs)
         
-        FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval, save_checkpoints = debug)
+        if debug
+            FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval)
+        else
+            FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
+        end
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         if !debug
             extract_data!(mft, selfcons, fileName)
         end
@@ -131,7 +139,7 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         @info "COMPLETED with convergence = $(convergence)!"
         return selfcons
     end
@@ -143,7 +151,7 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
         FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         @info "COMPLETED with convergence = $(convergence)!"
         return selfcons
     end
@@ -152,10 +160,14 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
 
         selfcons    =   SelfCons(MFTIterator, Update, Initial ; F_args = (mft , ), Update_kwargs = Update_kwargs)
         
-        FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval, save_checkpoints = debug)
+        if debug
+            FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval)
+        else
+            FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
+        end
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         if !debug
             extract_data!(mft, selfcons, fileName)
         end
@@ -167,10 +179,14 @@ Solves the mean-field theory on the given `MFT` object, and returns the `SelfCon
 
         selfcons    =   SelfCons(MFTIterator, Update, Initial ; F_args = (mft , ), Update_kwargs = Update_kwargs)
         
-        FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval, save_checkpoints = debug)
+        if debug
+            FixedPoint!(selfcons, fileName ; max_iter = max_iter, tol = tol, checkpoint_interval = checkpoint_interval)
+        else
+            FixedPoint!(selfcons ; max_iter = max_iter, tol = tol)
+        end
         GetGap!(mft.model)
 
-        convergence     =   norm(selfcons.VOuts[end] - selfcons.VIns[end]) / sqrt(length(selfcons.VOuts[end]))
+        convergence     =   maximum(abs.(selfcons.VOuts[end] - selfcons.VIns[end]))
         if !debug
             extract_data!(mft, selfcons, fileName)
         end
