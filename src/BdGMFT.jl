@@ -6,6 +6,7 @@ module BdGMFT
 
     using ..MeanFieldToolkit.MFTBonds: GetBondCoorelation, GetBondDictionary
     using ..MeanFieldToolkit.MFTEnergies: GetMFTBondEnergies
+    using ..MeanFieldToolkit.MFTDecompose: CheckDecompositions
 
     import ..MeanFieldToolkit.TBMFT: GetMFTEnergy
     
@@ -59,11 +60,17 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
             HoppingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
             PairingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
+
             return new{T, R, S}(model, HoppingOrders, PairingOrders, Interactions, HoppingDecomposition, PairingDecomposition, Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
         end
 
         function BdGMFTModel(model::BdGModel, HoppingOrders::Vector{Param{2, R}}, PairingOrders::Vector{Param{2, S}}, Interactions::Vector{Param{T, Float64}} , HoppingDecomposition::Vector{Function}, PairingDecomposition::Vector{Function}, HoppingScaling::Dict{String, Float64}, PairingScaling::Dict{String, Float64} ; HoppingLabels::Dict{String, String} = Dict{String, String}("ij" => "Hopping", "ii" => "Hopping On-Site", "jj" => "Hopping On-Site"), PairingLabels::Dict{String, String} = Dict{String, String}("ij" => "Pairing", "ii" => "Pairing On-Site", "jj" => "Pairing On-Site")) where {T, R <: Union{Float64, ComplexF64}, S <: Union{Float64, ComplexF64}}
+
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
 
             return new{T, R, S}(model, HoppingOrders, PairingOrders, Interactions, HoppingDecomposition, PairingDecomposition, Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
@@ -78,6 +85,9 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
             HoppingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
             PairingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
+
             return new{T, S, S}(model, HoppingOrders, PairingOrders, Interactions, HoppingDecomposition, PairingDecomposition, Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
         end
@@ -86,6 +96,9 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
 
             @warn "No Hopping Order parameters passed."
             HoppingOrders       =   Param{2, S}[]
+
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
 
             return new{T, S, S}(model, HoppingOrders, PairingOrders, Interactions, HoppingDecomposition, PairingDecomposition, Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
@@ -97,11 +110,17 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
             HoppingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
             PairingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
+
             return new{T, R, S}(model, HoppingOrders, PairingOrders, Interactions, repeat(Function[HoppingDecomposition], length(Interactions)), repeat(Function[PairingDecomposition], length(Interactions)), Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
         end
 
         function BdGMFTModel(model::BdGModel, HoppingOrders::Vector{Param{2, R}}, PairingOrders::Vector{Param{2, S}}, Interactions::Vector{Param{T, Float64}} , HoppingDecomposition::Function, PairingDecomposition::Function, HoppingScaling::Dict{String, Float64}, PairingScaling::Dict{String, Float64} ; HoppingLabels::Dict{String, String} = Dict{String, String}("ij" => "Hopping", "ii" => "Hopping On-Site", "jj" => "Hopping On-Site"), PairingLabels::Dict{String, String} = Dict{String, String}("ij" => "Pairing", "ii" => "Pairing On-Site", "jj" => "Pairing On-Site")) where {T, R <: Union{Float64, ComplexF64}, S <: Union{Float64, ComplexF64}}
+
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
 
             return new{T, R, S}(model, HoppingOrders, PairingOrders, Interactions, repeat(Function[HoppingDecomposition], length(Interactions)), repeat(Function[PairingDecomposition], length(Interactions)), Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
@@ -116,6 +135,9 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
             HoppingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
             PairingScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
+
             return new{T, S, S}(model, HoppingOrders, PairingOrders, Interactions, repeat(Function[HoppingDecomposition], length(Interactions)), repeat(Function[PairingDecomposition], length(Interactions)), Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 
         end
@@ -124,6 +146,9 @@ BdGMFTModel(model::BdGModel, PairingOrders::Vector{Param{2, S}}, Interactions::V
 
             @warn "No Hopping Order parameters passed."
             HoppingOrders       =   Param{2, S}[]
+
+            CheckDecompositions(Interactions, HoppingDecomposition)
+            CheckDecompositions(Interactions, PairingDecomposition)
 
             return new{T, S, S}(model, HoppingOrders, PairingOrders, Interactions, repeat(Function[HoppingDecomposition], length(Interactions)), repeat(Function[PairingDecomposition], length(Interactions)), Float64[], HoppingScaling, PairingScaling, HoppingLabels, PairingLabels)
 

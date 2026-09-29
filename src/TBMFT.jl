@@ -6,6 +6,7 @@ module TBMFT
 
     using ..MeanFieldToolkit.MFTBonds: GetBondCoorelation, GetBondDictionary
     using ..MeanFieldToolkit.MFTEnergies: GetMFTBondEnergies
+    using ..MeanFieldToolkit.MFTDecompose: CheckDecompositions
 
 
 @doc """
@@ -46,10 +47,14 @@ TBMFTModel(model::Model, HoppingOrders::Vector{Param{2, R}}, Interactions::Vecto
             @debug "`MFTScaling` attribute not passed. Resorting to default values of uniform relative scaling for every channel!"
             MFTScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, MFTDecomposition)
+
             return new{T, R}(model, HoppingOrders, Interactions, MFTDecomposition, Float64[], MFTScaling, ChannelLabels)
         end
 
         function TBMFTModel(model::Model, HoppingOrders::Vector{Param{2, R}}, Interactions::Vector{Param{T, Float64}}, MFTDecomposition::Vector{Function}, MFTScaling::Dict{String, Float64} ; ChannelLabels :: Dict{String, String} = Dict{String, String}("ij" => "Hopping", "ii" => "Hopping On-Site", "jj" => "Hopping On-Site")) where {T, R <: Union{Float64, ComplexF64}}
+
+            CheckDecompositions(Interactions, MFTDecomposition)
 
             return new{T, R}(model, HoppingOrders, Interactions, MFTDecomposition, Float64[], MFTScaling, ChannelLabels)
         end
@@ -59,10 +64,14 @@ TBMFTModel(model::Model, HoppingOrders::Vector{Param{2, R}}, Interactions::Vecto
             @debug "`MFTScaling` attribute not passed. Resorting to default values of uniform relative scaling for every channel!"
             MFTScaling      =   Dict{String, Float64}("ij" => 1.0, "ii" => 1.0, "jj" => 1.0)
 
+            CheckDecompositions(Interactions, MFTDecomposition)
+
             return new{T, R}(model, HoppingOrders, Interactions, repeat(Function[MFTDecomposition], length(Interactions)), Float64[], MFTScaling, ChannelLabels)
         end
 
         function TBMFTModel(model::Model, HoppingOrders::Vector{Param{2, R}}, Interactions::Vector{Param{T, Float64}}, MFTDecomposition::Function, MFTScaling::Dict{String, Float64} ; ChannelLabels :: Dict{String, String} = Dict{String, String}("ij" => "Hopping", "ii" => "Hopping On-Site", "jj" => "Hopping On-Site")) where {T, R <: Union{Float64, ComplexF64}}
+
+            CheckDecompositions(Interactions, MFTDecomposition)
 
             return new{T, R}(model, HoppingOrders, Interactions, repeat(Function[MFTDecomposition], length(Interactions)), Float64[], MFTScaling, ChannelLabels)
         end

@@ -86,6 +86,37 @@ The expectation values as a dictionary of matrices containing the expectation va
     end
 
 
+    ##### The built-in decompositions, and the one to use instead on the other kind of bond
+    const IntraCounterpart  =   Dict{Function, Function}(InterQuarticToHopping => IntraQuarticToHopping, InterQuarticToPairing => IntraQuarticToPairing)
+    const InterCounterpart  =   Dict{Function, Function}(IntraQuarticToHopping => InterQuarticToHopping, IntraQuarticToPairing => InterQuarticToPairing)
+
+@doc """
+```julia
+CheckDecompositions(Interactions::Vector{<:Param}, Decompositions::AbstractVector)
+CheckDecompositions(Interactions::Vector{<:Param}, Decomposition::Function)
+```
+Throws an `ArgumentError` if a built-in decomposition is used on the wrong kind of bond: the `Intra` decompositions only handle on-site bonds `(i, i, 0)`, and the `Inter` decompositions assume two different sites.
+User-defined decomposition functions are not checked.
+
+"""
+    function CheckDecompositions(Interactions::Vector{<:Param}, Decompositions::AbstractVector)
+
+        for (Interaction, Decomposition) in zip(Interactions, Decompositions)
+            for bond in Interaction.unitBonds
+                onsite  =   bond.base == bond.target && iszero(bond.offset)
+
+                if onsite && haskey(IntraCounterpart, Decomposition)
+                    throw(ArgumentError("Interaction \"$(Interaction.label)\" has an on-site bond on site $(bond.base), but uses $(Decomposition), which assumes two different sites. Use $(IntraCounterpart[Decomposition]) for on-site interactions, and put on-site and inter-site bonds in separate interaction Params."))
+                elseif !onsite && haskey(InterCounterpart, Decomposition)
+                    throw(ArgumentError("Interaction \"$(Interaction.label)\" has a bond between different sites ($(bond.base) → $(bond.target), offset $(bond.offset)), but uses $(Decomposition), which only handles on-site interactions. Use $(InterCounterpart[Decomposition]) for inter-site interactions, and put on-site and inter-site bonds in separate interaction Params."))
+                end
+            end
+        end
+    end
+
+    CheckDecompositions(Interactions::Vector{<:Param}, Decomposition::Function) = CheckDecompositions(Interactions, fill(Decomposition, length(Interactions)))
+
+
 
 
 end
